@@ -1,5 +1,5 @@
 const ChatPage = () => {
-  return <div>ChatPage</div>;
+  return <div className="w-full h-full">ChatPage</div>;
 };
 
 export default ChatPage;
