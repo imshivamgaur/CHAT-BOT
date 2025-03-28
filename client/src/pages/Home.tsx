@@ -20,7 +20,7 @@ const Home = () => {
           </p>
           <Link
             to={"/dashboard/"}
-            className="px-5 lg:px-8 py-2 bg-zinc-950 hover:bg-zinc-900 transition-all duration-300 border-2 border-zinc-500 text-gray-300 hover: rounded-lg text-lg font-semibold"
+            className="px-5 lg:px-8 py-2 bg-zinc-950 hover:bg-[#000000] transition-all duration-300 border-2 border-zinc-500 text-gray-300 hover: rounded-lg text-lg font-semibold shadow-sm hover:shadow-md shadow-purple-400 "
           >
             Get Started
           </Link>
@@ -31,7 +31,7 @@ const Home = () => {
           <img
             src="/bot.png"
             alt="Chatbot Illustration"
-            className="rounded-lg object-cover floating filter drop-shadow-[0px_5px_5px_rgba(193,100,255,0.8)]"
+            className="rounded-lg object-cover transition-all duration-300 floating filter drop-shadow-[0px_5px_5px_rgba(193,100,255,0.8)] hover:scale-105"
           />
         </div>
       </div>
