@@ -1,24 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
+import { GoogleGenAI } from "@google/genai";
+import ConnectToDB from "./Database/db.js";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-import { GoogleGenAI } from "@google/genai";
-
 const genAi = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 
-// async function main() {
-//   const response = await ai.models.generateContent({
-//     model: "gemini-2.0-flash",
-//     contents: "Explain how AI works in a few words atleast 200 words",
-//   });
-//   console.log(response.text);
-// }
-
-// await main();
-
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -62,6 +54,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running at port: ${PORT}`);
-});
+ConnectToDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`\nServer is running at port: ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    // throw new Error("Something went wrong");
+    console.log(error);
+  });
