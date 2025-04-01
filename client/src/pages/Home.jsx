@@ -15,7 +15,7 @@ const Home = () => {
           </h2>
 
           <p className="text-sm lg:text-lg text-gray-300 tracking-tight">
-            Your intelligent chatbot assistant, powered by OpenAI. Get instant
+            Your intelligent chatbot assistant, powered by Google's GenAI. Get instant
             answers, coding help, and much more – anytime, anywhere.
           </p>
           <Link
