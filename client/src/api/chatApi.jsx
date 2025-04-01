@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // For sidebar chatTitle
-export const fetchChatsTitle = async (userId: any, token: any) => {
+export const fetchChatsTitle = async (userId, token) => {
   try {
     const response = await axios.get(
       "https://bot4u-ai.onrender.com/api/v1/chats",
@@ -21,7 +21,7 @@ export const fetchChatsTitle = async (userId: any, token: any) => {
 };
 
 // For creating a new chat
-export const createChat = async (userId: any, token: any) => {
+export const createChat = async (userId, token) => {
   try {
     const response = await axios.post(
       "https://bot4u-ai.onrender.com/api/v1/chats",
