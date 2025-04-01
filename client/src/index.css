@@ -35,6 +35,9 @@
   background: #666; /* Lighter grey on hover */
 }
 
+*{
+  user-select: none;
+}
 /* custom loader */
 .loader {
   margin-left: 30px;

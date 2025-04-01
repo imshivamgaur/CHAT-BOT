@@ -22,7 +22,7 @@ const ChatPage = () => {
       try {
         const token = await getToken();
         const response = await axios.get(
-          `http://localhost:5000/api/v1/chats/${chatId}`,
+          `https://bot4u-ai.onrender.com/api/v1/chats/${chatId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ const ChatPage = () => {
     try {
       const token = await getToken();
       const response = await axios.put(
-        `http://localhost:5000/api/v1/chats/${chatId}`,
+        `https://bot4u-ai.onrender.com/api/v1/chats/${chatId}`,
         { prompt: message },
         {
           headers: {

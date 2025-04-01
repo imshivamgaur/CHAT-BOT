@@ -7,7 +7,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/clerk-react";
-import Footer from "../components/Footer.tsx";
+// import Footer from "../components/Footer.tsx";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 

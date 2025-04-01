@@ -3,12 +3,15 @@ import axios from "axios";
 // For sidebar chatTitle
 export const fetchChatsTitle = async (userId: any, token: any) => {
   try {
-    const response = await axios.get("http://localhost:5000/api/v1/chats", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "clerk-user-id": userId, // Send userId in headers
-      },
-    });
+    const response = await axios.get(
+      "https://bot4u-ai.onrender.com/api/v1/chats",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "clerk-user-id": userId, // Send userId in headers
+        },
+      }
+    );
 
     return response.data.chats; // Ensure you return only the chat list
   } catch (error) {
@@ -21,7 +24,7 @@ export const fetchChatsTitle = async (userId: any, token: any) => {
 export const createChat = async (userId: any, token: any) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/v1/chats",
+      "https://bot4u-ai.onrender.com/api/v1/chats",
       { prompt: "" },
       {
         headers: {
@@ -37,6 +40,3 @@ export const createChat = async (userId: any, token: any) => {
     return null;
   }
 };
-
-
-// 

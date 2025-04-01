@@ -53,7 +53,7 @@ const DashboardLayout = () => {
     if (!userId && !token) return;
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/v1/chats/${id}`,
+        `https://bot4u-ai.onrender.com/api/v1/chats/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
