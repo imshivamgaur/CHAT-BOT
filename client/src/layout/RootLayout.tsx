@@ -7,7 +7,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/clerk-react";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer.tsx";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -51,9 +51,9 @@ const RootLayout = () => {
         </nav>
         <main className="h-full pt-18 w-full relative flex-grow">
           <Outlet />
-          <footer>
+          {/* <footer>
             <Footer />
-          </footer>
+          </footer> */}
         </main>
       </div>
     </ClerkProvider>

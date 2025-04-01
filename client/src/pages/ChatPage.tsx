@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Get chatId from URL
+import { useState, useEffect, useRef } from "react";
+import { useOutletContext, useParams } from "react-router-dom"; // Get chatId from URL
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 import MarkDown from "react-markdown";
@@ -10,8 +10,9 @@ const ChatPage = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { getChats } = useOutletContext(); //It compes from right outlet in dashboard layout
 
-  console.log("Chat ID: ", chatId);
+  // console.log("Chat ID: ", getChats);
 
   // Fetch messages when component loads
   useEffect(() => {
@@ -61,6 +62,9 @@ const ChatPage = () => {
         }
       );
 
+      if (!response) return;
+
+      getChats();
       console.log("CHAT RESPONSE: ", response.data);
 
       // Update messages with AI response
@@ -72,15 +76,23 @@ const ChatPage = () => {
     }
   };
 
+  const messageEndRef = useRef(null);
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
-    <div className="h-full w-full flex flex-col">
+    <div className="h-full w-full flex flex-col p-5">
       {/* Chat messages */}
       <div className="flex flex-col flex-grow overflow-y-auto p-4 space-y-2">
         {messages.length > 0 ? (
           messages.map((msg, index) => (
             <div
               key={index}
-              className={`p-3 max-w-[70%] rounded-lg text-white break-words ${
+              className={`p-3 max-w-[90%] sm:max-w-[80%] rounded-lg text-white break-words ${
                 msg.sender === "user"
                   ? "bg-[#1276e88c] backdrop-blur-xl self-end"
                   : "bg-[#1c1c1c8c] backdrop-blur-xl self-start"
@@ -91,20 +103,22 @@ const ChatPage = () => {
           ))
         ) : (
           <div
-            className={`p-3 max-w-[70%] rounded-lg text-white  bg-gray-900 self-start`}
+            className={`p-3 max-w-[90%] sm:max-w-[70%]  rounded-lg text-white  bg-gray-900 self-start`}
           >
             Hey, there how can i assist you today?
           </div>
         )}
 
         {loading ? <div className="loader bg-blue-500"></div> : ""}
+        {/* This is the reference for auto-scrolling */}
+        <div ref={messageEndRef} />
       </div>
 
       {/* Input box */}
       <div className="flex items-center p-4 bg-[#3030307a] rounded-xl">
         <input
           type="text"
-          className="flex-grow p-3 bg-gray-900 text-white border border-gray-600 rounded-md outline-none"
+          className="flex-grow p-3 bg-[#30303000] text-white border-2 focus:border-blue-500 border-gray-600 rounded-md outline-none"
           placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -112,7 +126,7 @@ const ChatPage = () => {
         />
         <button
           onClick={sendMessage}
-          className="ml-2 px-4 w-[130px] py-3 bg-blue-600 cursor-pointer text-white rounded-md hover:bg-blue-700 transition"
+          className="ml-2 px-4 w-[110px] Md:w-[130px] py-3 bg-blue-600 cursor-pointer text-white rounded-md hover:bg-blue-700 transition"
           disabled={loading}
         >
           {loading ? "Sending..." : "Send"}

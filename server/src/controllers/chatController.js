@@ -116,21 +116,25 @@ export const addMessageToChat = async (req, res, next) => {
 
 // DELETE:  delete chats but chatId functionality
 export const DeleteUserChats = async (req, res, next) => {
-  const { chatId } = req.params;
-  console.log("ChatId: ", chatId);
-  const userId = req.userId; // Clerk userId from authMiddleware
+  try {
+    const { chatId } = req.params;
+    console.log("ChatId: ", chatId);
+    const userId = req.userId; // Clerk userId from authMiddleware
 
-  const chat = await Chat.deleteOne({ _id: chatId });
-  console.log("chat", chat);
+    const chat = await Chat.deleteOne({ _id: chatId });
+    console.log("chat", chat);
 
-  if (!chat || chat.deletedCount === 0) {
-    return next(new ErrorHandler("Chat not found", 404));
+    if (!chat || chat.deletedCount === 0) {
+      return next(new ErrorHandler("Chat not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Chat deleted successfully",
+    });
+  } catch (error) {
+    next(new ErrorHandler(error.message, 500));
   }
-
-  res.status(200).json({
-    success: true,
-    message: "Chat deleted successfully",
-  });
 };
 
 export const testHandler = (req, res) => {
