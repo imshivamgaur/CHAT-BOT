@@ -6,7 +6,7 @@ import ChatPage from "./pages/ChatPage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
-import DashboardLayout from "./layout/DashboardLayout.tsx";
+import DashboardLayout from "./layout/DashboardLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
             element: <Dashboard />,
           },
           {
-            path: "/dashboard/chats/:d",
+            path: "/dashboard/chats/:chatId",
             element: <ChatPage />,
           },
         ],

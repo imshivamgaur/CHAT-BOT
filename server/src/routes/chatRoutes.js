@@ -6,7 +6,7 @@ import {
   getChatMessages,
   getUserChats,
   testHandler,
-} from "../controllers/ChatController.js";
+} from "../controllers/chatController.js";
 import { requireAuth } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();

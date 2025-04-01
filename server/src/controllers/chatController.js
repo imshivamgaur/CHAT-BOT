@@ -9,20 +9,24 @@ export const chatHandler = async (req, res, next) => {
     // console.log(prompt, "message");
     const userId = req.userId; //Clerk userId from authMiddlware
 
-    if (!prompt) {
-      return next(new ErrorHandler("Please provide your prompt", 404));
-    }
+    const title = prompt || "New Chat";
+    let aiResponse = "";
 
-    const aiResponse = await askToGenAi(prompt);
+    if (prompt) {
+      aiResponse = await askToGenAi(prompt);
+      console.log(aiResponse);
+    }
 
     // saving to database
     const chat = await Chat.create({
       userId,
-      title: prompt,
-      messages: [
-        { sender: "user", text: prompt },
-        { sender: "ai", text: aiResponse },
-      ],
+      title,
+      messages: prompt
+        ? [
+            { sender: "user", text: prompt },
+            { sender: "ai", text: aiResponse },
+          ]
+        : [],
     });
 
     console.log("Response send to frontend");
@@ -55,15 +59,20 @@ export const getUserChats = async (req, res, next) => {
 
 // GET: Fetch messages of a specific chat
 export const getChatMessages = async (req, res, next) => {
-  const { chatId } = req.params;
-  const userId = req.userId;
+  try {
+    const { chatId } = req.params;
+    const userId = req.userId;
 
-  const chat = await Chat.findOne({ _id: chatId, userId });
-  if (!chat) {
-    return next(new ErrorHandler("Chat not found", 404));
+    const chat = await Chat.findOne({ _id: chatId, userId });
+
+    if (!chat) {
+      return next(new ErrorHandler("Chat not found", 404));
+    }
+
+    res.status(200).json({ success: true, messages: chat.messages });
+  } catch (error) {
+    next(new ErrorHandler("No such chat found"));
   }
-
-  res.status(200).json({ success: true, messages: chat.messages });
 };
 
 // PUT: Add new message to the chat
@@ -71,6 +80,7 @@ export const addMessageToChat = async (req, res, next) => {
   try {
     const { chatId } = req.params;
     const { prompt } = req.body;
+    console.log("PROOOOOOOOOMPT: ", prompt);
     const userId = req.userId; // Clerk userId from authMiddleware
 
     if (!prompt) {
@@ -87,6 +97,10 @@ export const addMessageToChat = async (req, res, next) => {
 
     chat.messages.push({ sender: "user", text: prompt });
     chat.messages.push({ sender: "ai", text: aiResponse });
+
+    if (chat.title === "New Chat") {
+      chat.title = prompt;
+    }
 
     // Save the updated
     await chat.save();
