@@ -6,16 +6,18 @@ import { MdMenu } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const DashboardLayout = () => {
   const { userId, isLoaded, getToken } = useAuth();
   const [chats, setChats] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(null);
 
   const navigate = useNavigate();
   const { chatId } = useParams();
 
-  // Adding new chat
+  // making new chat
   const addNewchat = useCallback(async () => {
     if (!userId) return;
 
@@ -28,6 +30,7 @@ const DashboardLayout = () => {
       }
       console.log("New chat is created", newChat);
       navigate(`/dashboard/chats/${newChat._id}`);
+      toast.success("New chat created");
     } catch (error) {
       console.error("Error creating chat:", error);
     }
@@ -36,6 +39,7 @@ const DashboardLayout = () => {
   // get chats with title
   const getChats = useCallback(async () => {
     if (!userId) return;
+    setLoading(true);
 
     try {
       const token = await getToken(); // Fetch the token
@@ -43,6 +47,9 @@ const DashboardLayout = () => {
       setChats(data);
     } catch (error) {
       console.error("Error fetching chats:", error.message);
+      toast.error("Error to get the chats");
+    } finally {
+      setLoading(false);
     }
   }, [userId]);
 
@@ -61,11 +68,12 @@ const DashboardLayout = () => {
           },
         }
       );
-
+      toast.success("Chat deleted successfully");
       console.log(response.data);
       navigate("/dashboard");
       getChats();
     } catch (error) {
+      toast.error("Error while deleting");
       console.log("Error to delete", error.message);
     }
   };
@@ -84,7 +92,7 @@ const DashboardLayout = () => {
   if (!isLoaded)
     return (
       <div className="w-full h-full flex justify-center items-center text-2xl text-blue-200">
-        Loading...
+        <div className="loader"></div>
       </div>
     );
 
@@ -112,7 +120,9 @@ const DashboardLayout = () => {
         </button>
         <ul className="flex flex-col gap-3 list-none">
           <div className="font-semibold text-gray-200">RECENT CHATS</div>
-          {chats.length > 0 ? (
+          {loading ? (
+            <div className="loader"></div>
+          ) : chats.length > 0 ? (
             chats.map((chat) => {
               const isActive = chat._id === chatId; // Check if chat is active
 

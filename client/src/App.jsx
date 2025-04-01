@@ -4,46 +4,51 @@ import Home from "./pages/Home";
 import RootLayout from "./layout/RootLayout.jsx";
 import Dashboard from "./pages/Dashboard";
 import ChatPage from "./pages/ChatPage";
-import SignIn from "./pages/SignIn";
+import SignIn from "./pages/SignIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import DashboardLayout from "./layout/DashboardLayout.jsx";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      element: <RootLayout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/dashboard",
+          element: <DashboardLayout />,
+          children: [
+            {
+              path: "",
+              element: <Dashboard />,
+            },
+            {
+              path: "/dashboard/chats/:chatId",
+              element: <ChatPage />,
+            },
+          ],
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "sign-in",
+          element: <SignIn />,
+        },
+        {
+          path: "sign-up",
+          element: <SignUp />,
+        },
+      ],
+      errorElement: <ErrorPage />,
+    },
+  ],
   {
-    element: <RootLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/dashboard",
-        element: <DashboardLayout />,
-        children: [
-          {
-            path: "",
-            element: <Dashboard />,
-          },
-          {
-            path: "/dashboard/chats/:chatId",
-            element: <ChatPage />,
-          },
-        ],
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/sign-in/",
-        element: <SignIn />,
-      },
-      {
-        path: "/sign-up/",
-        element: <SignUp />,
-      },
-    ],
-    errorElement: <ErrorPage />,
-  },
-]);
+    basename: "/",
+  }
+);
 
 const App = () => {
   return (

@@ -10,6 +10,7 @@ const ChatPage = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [messageloading, setMessageloading] = useState(false);
   const { getChats } = useOutletContext(); //It compes from right outlet in dashboard layout
 
   // console.log("Chat ID: ", getChats);
@@ -17,6 +18,7 @@ const ChatPage = () => {
   // Fetch messages when component loads
   useEffect(() => {
     if (!chatId || !userId) return;
+    setMessageloading(true);
 
     const fetchMessages = async () => {
       try {
@@ -34,6 +36,8 @@ const ChatPage = () => {
         setMessages(response.data.messages);
       } catch (error) {
         console.error("Error fetching messages:", error);
+      } finally {
+        setMessageloading(false);
       }
     };
 
@@ -64,7 +68,11 @@ const ChatPage = () => {
 
       if (!response) return;
 
-      getChats();
+      //If the messages = [] then only this function runs to set the title.
+      if (messages.length === 0) {
+        getChats();
+      }
+
       console.log("CHAT RESPONSE: ", response.data);
 
       // Update messages with AI response
@@ -88,7 +96,9 @@ const ChatPage = () => {
     <div className="h-full w-full flex flex-col p-5">
       {/* Chat messages */}
       <div className="flex flex-col flex-grow overflow-y-auto p-4 space-y-2">
-        {messages.length > 0 ? (
+        {messageloading ? (
+          <div className="loader"></div>
+        ) : messages.length > 0 ? (
           messages.map((msg, index) => (
             <div
               key={index}
